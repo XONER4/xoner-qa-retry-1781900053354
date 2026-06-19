@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Тестовый сайт — Калькулятор и Угадай число</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
@@ -22,311 +18,223 @@
         .container {
             max-width: 900px;
             width: 100%;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        @media (max-width: 700px) {
+            .container { grid-template-columns: 1fr; }
         }
         .card {
-            background: rgba(255, 255, 255, 0.07);
+            background: rgba(255,255,255,0.07);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 24px;
-            padding: 30px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            padding: 28px 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
             color: #fff;
-            transition: transform 0.2s;
         }
-        .card:hover {
-            transform: translateY(-4px);
-        }
-        h2 {
-            font-size: 24px;
+        .card h2 {
+            font-size: 22px;
             margin-bottom: 20px;
             text-align: center;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            color: #e0e0ff;
+            color: #a78bfa;
         }
-        .calc-display {
+        .card input, .card select {
             width: 100%;
-            padding: 18px 20px;
-            font-size: 28px;
-            text-align: right;
-            border: none;
-            border-radius: 16px;
-            background: rgba(0,0,0,0.4);
-            color: #fff;
-            margin-bottom: 16px;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 1px;
-        }
-        .calc-buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-        }
-        .calc-btn {
-            padding: 18px;
-            font-size: 20px;
-            border: none;
-            border-radius: 14px;
-            background: rgba(255,255,255,0.08);
-            color: #fff;
-            cursor: pointer;
-            transition: all 0.15s;
-            font-weight: 500;
-        }
-        .calc-btn:hover {
-            background: rgba(255,255,255,0.18);
-            transform: scale(1.03);
-        }
-        .calc-btn:active {
-            transform: scale(0.95);
-        }
-        .calc-btn.op {
-            background: rgba(255, 165, 0, 0.25);
-            color: #ffb347;
-        }
-        .calc-btn.op:hover {
-            background: rgba(255, 165, 0, 0.4);
-        }
-        .calc-btn.eq {
-            background: rgba(0, 200, 100, 0.3);
-            color: #66ff99;
-            grid-column: span 2;
-        }
-        .calc-btn.eq:hover {
-            background: rgba(0, 200, 100, 0.5);
-        }
-        .calc-btn.clear {
-            background: rgba(255, 60, 60, 0.2);
-            color: #ff6b6b;
-        }
-        .calc-btn.clear:hover {
-            background: rgba(255, 60, 60, 0.35);
-        }
-        .game-section {
-            text-align: center;
-        }
-        .game-section p {
-            color: #b0b0d0;
-            margin-bottom: 16px;
-            font-size: 15px;
-            line-height: 1.5;
-        }
-        .game-input {
-            width: 100%;
-            padding: 14px 18px;
-            font-size: 20px;
-            text-align: center;
-            border: none;
-            border-radius: 14px;
-            background: rgba(0,0,0,0.4);
-            color: #fff;
+            padding: 12px 14px;
             margin-bottom: 12px;
-            font-family: 'Courier New', monospace;
-        }
-        .game-btn {
-            padding: 14px 30px;
-            font-size: 18px;
             border: none;
-            border-radius: 14px;
-            background: rgba(100, 150, 255, 0.25);
-            color: #99bbff;
-            cursor: pointer;
-            transition: all 0.15s;
-            font-weight: 500;
-            margin: 4px;
-        }
-        .game-btn:hover {
-            background: rgba(100, 150, 255, 0.4);
-            transform: scale(1.03);
-        }
-        .game-btn:active {
-            transform: scale(0.95);
-        }
-        .game-btn.reset {
-            background: rgba(255, 165, 0, 0.2);
-            color: #ffb347;
-        }
-        .game-btn.reset:hover {
-            background: rgba(255, 165, 0, 0.35);
-        }
-        .game-message {
-            margin-top: 16px;
-            padding: 14px;
-            border-radius: 14px;
-            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
             font-size: 16px;
-            min-height: 50px;
-            color: #c0c0e0;
+            outline: none;
+            transition: 0.2s;
         }
-        .game-message.win {
-            background: rgba(0, 200, 100, 0.2);
-            color: #66ff99;
+        .card input::placeholder { color: rgba(255,255,255,0.4); }
+        .card input:focus, .card select:focus { background: rgba(255,255,255,0.18); }
+        .card select option { background: #302b63; color: #fff; }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #7c3aed, #a78bfa);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-bottom: 12px;
         }
-        .game-message.lose {
-            background: rgba(255, 60, 60, 0.15);
-            color: #ff6b6b;
+        .btn:hover { transform: scale(1.02); opacity: 0.9; }
+        .btn:active { transform: scale(0.98); }
+        .result-box {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 14px;
+            min-height: 48px;
+            margin-top: 8px;
+            font-size: 18px;
+            text-align: center;
+            word-break: break-word;
         }
-        .attempts {
-            margin-top: 10px;
+        .result-box.success { color: #4ade80; }
+        .result-box.error { color: #f87171; }
+        .result-box.info { color: #60a5fa; }
+        .calc-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .calc-row input { flex: 1; margin-bottom: 0; }
+        .calc-row select { flex: 0 0 60px; margin-bottom: 0; }
+        .game-hint {
             font-size: 14px;
-            color: #8888aa;
+            color: rgba(255,255,255,0.6);
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .game-attempts {
+            text-align: center;
+            font-size: 14px;
+            color: #fbbf24;
+            margin-bottom: 8px;
         }
         .footer {
+            grid-column: 1 / -1;
             text-align: center;
-            color: #6666aa;
+            color: rgba(255,255,255,0.3);
             font-size: 13px;
-            margin-top: 20px;
-            width: 100%;
-        }
-        @media (max-width: 480px) {
-            .card { padding: 20px; }
-            .calc-btn { padding: 14px; font-size: 17px; }
+            margin-top: 8px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Калькулятор -->
-        <div class="card">
-            <h2>🧮 Калькулятор</h2>
-            <input type="text" class="calc-display" id="calcDisplay" readonly value="0">
-            <div class="calc-buttons">
-                <button class="calc-btn clear" onclick="clearCalc()">C</button>
-                <button class="calc-btn op" onclick="appendCalc('(')">(</button>
-                <button class="calc-btn op" onclick="appendCalc(')')">)</button>
-                <button class="calc-btn op" onclick="appendCalc('/')">÷</button>
+<div class="container">
 
-                <button class="calc-btn" onclick="appendCalc('7')">7</button>
-                <button class="calc-btn" onclick="appendCalc('8')">8</button>
-                <button class="calc-btn" onclick="appendCalc('9')">9</button>
-                <button class="calc-btn op" onclick="appendCalc('*')">×</button>
-
-                <button class="calc-btn" onclick="appendCalc('4')">4</button>
-                <button class="calc-btn" onclick="appendCalc('5')">5</button>
-                <button class="calc-btn" onclick="appendCalc('6')">6</button>
-                <button class="calc-btn op" onclick="appendCalc('-')">−</button>
-
-                <button class="calc-btn" onclick="appendCalc('1')">1</button>
-                <button class="calc-btn" onclick="appendCalc('2')">2</button>
-                <button class="calc-btn" onclick="appendCalc('3')">3</button>
-                <button class="calc-btn op" onclick="appendCalc('+')">+</button>
-
-                <button class="calc-btn" onclick="appendCalc('0')">0</button>
-                <button class="calc-btn" onclick="appendCalc('.')">.</button>
-                <button class="calc-btn eq" onclick="calculate()">=</button>
-            </div>
+    <!-- Калькулятор -->
+    <div class="card">
+        <h2>🧮 Калькулятор</h2>
+        <div class="calc-row">
+            <input type="number" id="calcNum1" placeholder="Первое число" step="any">
+            <select id="calcOp">
+                <option value="+">+</option>
+                <option value="-">−</option>
+                <option value="*">×</option>
+                <option value="/">÷</option>
+            </select>
+            <input type="number" id="calcNum2" placeholder="Второе число" step="any">
         </div>
-
-        <!-- Игра "Угадай число" -->
-        <div class="card game-section">
-            <h2>🎯 Угадай число</h2>
-            <p>Я загадал число от 1 до 100. Попробуй угадать!</p>
-            <input type="number" class="game-input" id="guessInput" placeholder="Введи число..." min="1" max="100">
-            <div>
-                <button class="game-btn" onclick="checkGuess()">✅ Проверить</button>
-                <button class="game-btn reset" onclick="resetGame()">🔄 Новая игра</button>
-            </div>
-            <div class="game-message" id="gameMessage">🔮 Введи число и нажми «Проверить»</div>
-            <div class="attempts" id="attemptsDisplay">Попыток: 0</div>
-        </div>
-
-        <div class="footer">Тестовый сайт · XONER AI</div>
+        <button class="btn" onclick="calculate()">= Посчитать</button>
+        <div class="result-box info" id="calcResult">Введите числа и нажмите «Посчитать»</div>
     </div>
 
-    <script>
-        // ===== Калькулятор =====
-        function appendCalc(val) {
-            const display = document.getElementById('calcDisplay');
-            if (display.value === '0' && val !== '.' && !'+-*/'.includes(val)) {
-                display.value = val;
-            } else {
-                display.value += val;
-            }
+    <!-- Угадай число -->
+    <div class="card">
+        <h2>🎯 Угадай число</h2>
+        <p class="game-hint">Я загадал число от 1 до 100. Попробуй угадать!</p>
+        <input type="number" id="guessInput" placeholder="Твоё предположение" min="1" max="100">
+        <button class="btn" onclick="makeGuess()">Проверить</button>
+        <button class="btn" style="background: rgba(255,255,255,0.1);" onclick="resetGame()">🔄 Новая игра</button>
+        <div class="game-attempts" id="attemptsDisplay">Попыток: 0</div>
+        <div class="result-box info" id="gameResult">Нажми «Проверить», чтобы начать</div>
+    </div>
+
+    <div class="footer">Тестовый сайт · Калькулятор + Угадай число</div>
+</div>
+
+<script>
+    // ===== Калькулятор =====
+    function calculate() {
+        const num1 = parseFloat(document.getElementById('calcNum1').value);
+        const num2 = parseFloat(document.getElementById('calcNum2').value);
+        const op = document.getElementById('calcOp').value;
+        const resultBox = document.getElementById('calcResult');
+
+        if (isNaN(num1) || isNaN(num2)) {
+            resultBox.className = 'result-box error';
+            resultBox.textContent = '⚠️ Введите оба числа';
+            return;
         }
 
-        function clearCalc() {
-            document.getElementById('calcDisplay').value = '0';
-        }
-
-        function calculate() {
-            const display = document.getElementById('calcDisplay');
-            try {
-                let expr = display.value.replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-');
-                const result = Function('"use strict"; return (' + expr + ')')();
-                display.value = Number.isFinite(result) ? Math.round(result * 100000000) / 100000000 : 'Ошибка';
-            } catch (e) {
-                display.value = 'Ошибка';
-            }
-        }
-
-        // ===== Игра "Угадай число" =====
-        let secretNumber = Math.floor(Math.random() * 100) + 1;
-        let attempts = 0;
-        let gameOver = false;
-
-        function checkGuess() {
-            const input = document.getElementById('guessInput');
-            const message = document.getElementById('gameMessage');
-            const attemptsDisplay = document.getElementById('attemptsDisplay');
-
-            if (gameOver) {
-                message.textContent = '🔄 Игра окончена! Нажми «Новая игра»';
-                message.className = 'game-message';
-                return;
-            }
-
-            const guess = parseInt(input.value, 10);
-
-            if (isNaN(guess) || guess < 1 || guess > 100) {
-                message.textContent = '⚠️ Введи число от 1 до 100';
-                message.className = 'game-message';
-                return;
-            }
-
-            attempts++;
-            attemptsDisplay.textContent = 'Попыток: ' + attempts;
-
-            if (guess === secretNumber) {
-                message.textContent = '🎉 Поздравляю! Ты угадал число ' + secretNumber + ' за ' + attempts + ' попыток!';
-                message.className = 'game-message win';
-                gameOver = true;
-            } else if (guess < secretNumber) {
-                message.textContent = '📈 Загаданное число больше. Попробуй ещё!';
-                message.className = 'game-message';
-            } else {
-                message.textContent = '📉 Загаданное число меньше. Попробуй ещё!';
-                message.className = 'game-message';
-            }
-
-            input.value = '';
-            input.focus();
-        }
-
-        function resetGame() {
-            secretNumber = Math.floor(Math.random() * 100) + 1;
-            attempts = 0;
-            gameOver = false;
-            document.getElementById('guessInput').value = '';
-            document.getElementById('gameMessage').textContent = '🔄 Новая игра! Число от 1 до 100 загадано.';
-            document.getElementById('gameMessage').className = 'game-message';
-            document.getElementById('attemptsDisplay').textContent = 'Попыток: 0';
-            document.getElementById('guessInput').focus();
-        }
-
-        // Enter для игры
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('guessInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    checkGuess();
+        let result;
+        switch (op) {
+            case '+': result = num1 + num2; break;
+            case '-': result = num1 - num2; break;
+            case '*': result = num1 * num2; break;
+            case '/':
+                if (num2 === 0) {
+                    resultBox.className = 'result-box error';
+                    resultBox.textContent = '⚠️ На ноль делить нельзя';
+                    return;
                 }
-            });
-        });
-    </script>
+                result = num1 / num2;
+                break;
+            default:
+                resultBox.className = 'result-box error';
+                resultBox.textContent = '⚠️ Неизвестная операция';
+                return;
+        }
+
+        resultBox.className = 'result-box success';
+        resultBox.textContent = `${num1} ${op} ${num2} = ${result}`;
+    }
+
+    // ===== Угадай число =====
+    let secretNumber = Math.floor(Math.random() * 100) + 1;
+    let attempts = 0;
+    let gameOver = false;
+
+    function makeGuess() {
+        const input = document.getElementById('guessInput');
+        const resultBox = document.getElementById('gameResult');
+        const attemptsDisplay = document.getElementById('attemptsDisplay');
+        const guess = parseInt(input.value);
+
+        if (gameOver) {
+            resultBox.className = 'result-box info';
+            resultBox.textContent = '🔄 Игра окончена. Нажми «Новая игра»';
+            return;
+        }
+
+        if (isNaN(guess) || guess < 1 || guess > 100) {
+            resultBox.className = 'result-box error';
+            resultBox.textContent = '⚠️ Введи число от 1 до 100';
+            return;
+        }
+
+        attempts++;
+        attemptsDisplay.textContent = `Попыток: ${attempts}`;
+
+        if (guess === secretNumber) {
+            resultBox.className = 'result-box success';
+            resultBox.textContent = `🎉 Поздравляю! Ты угадал число ${secretNumber} за ${attempts} попыток!`;
+            gameOver = true;
+        } else if (guess < secretNumber) {
+            resultBox.className = 'result-box info';
+            resultBox.textContent = '⬆️ Загаданное число больше';
+        } else {
+            resultBox.className = 'result-box info';
+            resultBox.textContent = '⬇️ Загаданное число меньше';
+        }
+
+        input.value = '';
+        input.focus();
+    }
+
+    function resetGame() {
+        secretNumber = Math.floor(Math.random() * 100) + 1;
+        attempts = 0;
+        gameOver = false;
+        document.getElementById('attemptsDisplay').textContent = 'Попыток: 0';
+        const resultBox = document.getElementById('gameResult');
+        resultBox.className = 'result-box info';
+        resultBox.textContent = '🔄 Новая игра! Введи число от 1 до 100';
+        document.getElementById('guessInput').value = '';
+        document.getElementById('guessInput').focus();
+    }
+</script>
 </body>
 </html>
